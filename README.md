@@ -10,6 +10,7 @@ Steps:
 3.  sudo mv boost_1_82_0 /usr/local/boost
 
 Decide which python environment you want to build against.  In this case, I want to build against my conda xxx environment, which uses Python 3.11.
+
 4.  Find these files within the specified conda environment, and record their paths:  
     libpython3.11.so     ~/miniconda3/envs/xxx/lib/libpython3.11.so
     Python.h             ~/miniconda3/envs/xxx/include/python3.11/Python.h
