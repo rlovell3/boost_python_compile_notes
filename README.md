@@ -12,11 +12,11 @@ Steps:
 Decide which python environment you want to build against.  In this case, I want to build against my conda xxx environment, which uses Python 3.11.
 
 4.  Find these files within the specified conda environment, and record their paths:  
-    libpython3.11.so     ~/miniconda3/envs/xxx/lib/libpython3.11.so
+    libpython3.11.so :       ~/miniconda3/envs/xxx/lib/libpython3.11.so
     
-    Python.h             ~/miniconda3/envs/xxx/include/python3.11/Python.h
+    Python.h    :            ~/miniconda3/envs/xxx/include/python3.11/Python.h
     
-    python3.11 executable   ~/miniconda3/envs/xxx/bin/python3.11
+    python3.11 executable   :     ~/miniconda3/envs/xxx/bin/python3.11
     
 5.  Create a directory to hold all your freshly-built Boost Python stuff:
 ```bash
@@ -24,6 +24,9 @@ mkdir ~/1Boost
 ```
 
 #### NOTE:  
+
+Don't shortcut paths with ~/ for home, like I've done in my notes.  In any command or config, write out the full path: /home/rl/whatever/and_more/...
+
 When you run bootstrap, it will backup but also write over any work you may have done to project-config.jam.  If you already made the changes below to project-config.jam, it will likely now be renamed project-config.jam.1.  Or some other number.  In all regards, at this point, you must make sure that the file, project-config.jam is the file with your paths and notes.  You know wnat to do....  
 
 Location:  project-config.jam:  /usr/local/boost/project-config.jam
@@ -71,10 +74,10 @@ libraries = python ;
 
 # These settings are equivalent to corresponding command-line
 # options.
-option.set prefix : ~/1Boost ;
-option.set exec-prefix : ~/1Boost ;
-option.set libdir : ~/1Boost/lib ;
-option.set includedir : ~/1Boost/include ;
+option.set prefix : /home/rl/1Boost ;
+option.set exec-prefix : /home/rl/1Boost ;
+option.set libdir : /home/rl/1Boost/lib ;
+option.set includedir : /home/rl/1Boost/include ;
 
 # Stop on first error
 option.set keep-going : false ;
@@ -84,10 +87,10 @@ option.set keep-going : false ;
 ### Run these commands to compile Boost.Python:
 ```bash
 cd /usr/local/boost
-./bootstrap.sh --with-python=~/Miniconda3/envs/otcrs/bin/python3.11
+./bootstrap.sh --with-python=~/miniconda3/envs/otcrs/bin/python3.11
 #  REMEMBER:  you just overwrote project-config.jam.  Assert your project-config.jam is as written above before proceeding.
 # Then, ....
-./b2 --with-python --debug-configuration --prefix=~/1Boost  --stagedir=~/1Boost/stage --build-type=minimal  --build-dir=~/1Boost-build --layout=versioned --python-buildid=311 --variant=release --link=shared --threading=multi > ~/1Boost/compile_output.txt 2>&1
+./b2 --with-python --debug-configuration --prefix=/home/rl/1Boost  --stagedir=/home/rl//1Boost/stage --build-type=minimal  --build-dir=/home/rl/1Boost-build --layout=versioned --python-buildid=311 --variant=release --link=shared --threading=multi > ~/1Boost/compile_output.txt 2>&1
 ```
 
 Running ./b2 as listed above will produce a debug output file:   ~/1Boost/compile_output.txt
