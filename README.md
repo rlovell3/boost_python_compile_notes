@@ -13,7 +13,9 @@ Decide which python environment you want to build against.  In this case, I want
 
 4.  Find these files within the specified conda environment, and record their paths:  
     libpython3.11.so     ~/miniconda3/envs/xxx/lib/libpython3.11.so
+    
     Python.h             ~/miniconda3/envs/xxx/include/python3.11/Python.h
+    
     python3.11 executable   ~/miniconda3/envs/xxx/bin/python3.11
     
 5.  Create a directory to hold all your freshly-built Boost Python stuff:
