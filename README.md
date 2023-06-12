@@ -26,7 +26,7 @@ mkdir ~/1Boost
 #### NOTE:  
 When you run bootstrap, it will backup but also write over any work you may have done to project-config.jam.  If you already made the changes below to project-config.jam, it will likely now be renamed project-config.jam.1.  Or some other number.  In all regards, at this point, you must make sure that the file, project-config.jam is the file with your paths and notes.  You know wnat to do....  
 
-Location:  project-config.jam:  /usr/local/boost/project-coonfig.jam
+Location:  project-config.jam:  /usr/local/boost/project-config.jam
 
 #### project-config.jam file contents:
 ```bash
