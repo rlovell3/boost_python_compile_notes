@@ -93,4 +93,6 @@ cd /usr/local/boost
 Running ./b2 as listed above will produce a debug output file:   ~/1Boost/compile_output.txt
 You can read that file to look for any errors in the build.  
 
+Finally, don't ask me.  I'm not a Boost expert.  I was just struggling through the Boost.Python build process like most everyone, and documented my navigation of the process here. 
+
 
