@@ -20,7 +20,14 @@ Decide which python environment you want to build against.  In this case, I want
     
 5.  Create a directory to hold all your freshly-built Boost Python stuff:
 ```bash
-mkdir ~/1Boost
+mkdir ~/3Boost
+```
+
+### Prepare your bootstrap.sh arguments (adjust all paths for your own environment):
+```bash
+./bootstrap.sh --with-python=/home/rl/miniconda3/envs/otcrs/bin/python3.11 --with-python-root=/home/rl/miniconda3/envs/otcrs --with-python-version=3.11 --with-libraries=python --with-icu --with-icu=/home/rl/miniconda3/envs/otcrs/lib --prefix=/home/rl/3Boost --exec-prefix=/home/rl/3Boost --libdir=/home/rl/3Boost/lib --includedir=/home/rl/3Boost/include
+
+// bootstrap overwrites your project-config.jam.  But a lot of the arguments I passed to bootstrap were to build the project-config.jam pile properly.  nevertheless, always cat project-config.jam to assert that it contains what you need it to contain.
 ```
 
 #### NOTE:  
@@ -51,7 +58,7 @@ if ! gcc in [ feature.values <toolset> ]
 
 project : default-build <toolset>gcc ;
 
-# Python configuration  (I hard-coded my home/rl path.  Maybe ~/ works.  Fix path to suit your proper /home/whatever/ path.
+# Python configuration  (I hard-coded my home/rl path.  Shortcutting with ~/ does not work.  Fix path to suit your proper /home/whatever/ path.
 import python ;
 if ! [ python.configured ]
 {
@@ -74,28 +81,60 @@ libraries = python ;
 
 # These settings are equivalent to corresponding command-line
 # options.
-option.set prefix : /home/rl/1Boost ;
-option.set exec-prefix : /home/rl/1Boost ;
-option.set libdir : /home/rl/1Boost/lib ;
-option.set includedir : /home/rl/1Boost/include ;
+option.set prefix : /home/rl/3Boost ;
+option.set exec-prefix : /home/rl/3Boost ;
+option.set libdir : /home/rl/3Boost/lib ;
+option.set includedir : /home/rl/3Boost/include ;
 
 # Stop on first error
 option.set keep-going : false ;
 ##### END of file 
 ```
 
-### Run these commands to compile Boost.Python:
+### Run ./b2 --help.  Then, once ready, run your own b2 with your own arguments:
 ```bash
 cd /usr/local/boost
-./bootstrap.sh --with-python=~/miniconda3/envs/otcrs/bin/python3.11
-#  REMEMBER:  you just overwrote project-config.jam.  Assert your project-config.jam is as written above before proceeding.
-# Then, ....
-./b2 --with-python --debug-configuration --prefix=/home/rl/1Boost  --stagedir=/home/rl//1Boost/stage --build-type=minimal  --build-dir=/home/rl/1Boost-build --layout=versioned --python-buildid=311 --variant=release --link=shared --threading=multi > ~/1Boost/compile_output.txt 2>&1
+./b2 --with-python --prefix=/home/rl/3Boost  --stagedir=/home/rl/3Boost/stage  stage --build-type=complete  --build-dir=/home/rl/3Boost-build --layout=versioned --variant=release --link=shared threading=single,multi runtime-link=static,shared
 ```
-
-Running ./b2 as listed above will produce a debug output file:   ~/1Boost/compile_output.txt
+I recommend adding this to the tail of the b2 command:  > /home/rl/3Boost/b2_output.txt
 You can read that file to look for any errors in the build.  
 
-Finally, don't ask me.  I'm not a Boost expert.  I was just struggling through the Boost.Python build process like most everyone, and documented my navigation of the process here. 
+Boost.Python .so files will now be ready for use in your c++ library build:
+
+###  the super-important makefile:
+command:  make -f makefile_name.mak
+
+File Contents:
+```
+PYTHON_VERSION = 3.11
+PYTHON_INCLUDE = /home/rl/miniconda3/envs/otcrs/include/python3.11
+
+BOOST_INC = /usr/local/boost
+BOOST_LIB = /home/rl/3Boost/stage/lib/
+
+# compile mesh class
+TARGET = calc_dist
+SOURCES = calc_dist.cpp options.cpp
+O_FILES = calc_dist.o options.o
+
+# all commands on the 2nd line must be TAB-INDENTED
+$(TARGET).so: $(O_FILES)
+	g++ -shared -Wl,-rpath=/home/rl/3Boost/stage/lib -Wall -export-dynamic $(O_FILES) -L$(BOOST_LIB) -lboost_python311-gcc11-x64-1_82 -L/usr/lib/python3.11/config-3.11-x86_64-linux-gnu -lpython$(PYTHON_VERSION) -o $(TARGET).so
+
+calc_dist.o: calc_dist.cpp
+	g++ -I$(PYTHON_INCLUDE) -I$(BOOST_INC) -fPIC -c calc_dist.cpp
+
+options.o: options.cpp
+	g++ -I$(PYTHON_INCLUDE) -I$(BOOST_INC) -fPIC -c options.cpp
+
+clean:
+	rm -f *.o *.so
+
+```
+
+Note the use of rpath in the makefile build command.  This is critical to do.  In your python script, when you import calc_dist (or your own library name), the import will fail with an error message indicating it can't find one of the more arcane files in your Boost.Python .so files.  Using rpath in your build of your own .so library fixes this.
+
+
+Finally, don't ask me.  I'm not a Boost expert.  I was just struggling through the Boost.Python build process like most everyone, and documented my navigation of the process here, mostly for me, the next time I find myself needing to do this again.
 
 
