@@ -25,7 +25,7 @@ mkdir ~/3Boost
 
 ### Prepare your bootstrap.sh arguments (adjust all paths for your own environment):
 ```bash
-./bootstrap.sh --with-python=/home/rl/miniconda3/envs/otcrs/bin/python3.11 --with-python-root=/home/rl/miniconda3/envs/otcrs --with-python-version=3.11 --with-libraries=python --with-icu --with-icu=/home/rl/miniconda3/envs/otcrs/lib --prefix=/home/rl/3Boost --exec-prefix=/home/rl/3Boost --libdir=/home/rl/3Boost/lib --includedir=/home/rl/3Boost/include
+./bootstrap.sh --with-python=/home/rl/miniconda3/envs/xxx/bin/python3.11 --with-python-root=/home/rl/miniconda3/envs/xxx --with-python-version=3.11 --with-libraries=python --with-icu --with-icu=/home/rl/miniconda3/envs/xxx/lib --prefix=/home/rl/3Boost --exec-prefix=/home/rl/3Boost --libdir=/home/rl/3Boost/lib --includedir=/home/rl/3Boost/include
 
 // bootstrap overwrites your project-config.jam.  But a lot of the arguments I passed to bootstrap were to build the project-config.jam pile properly.  nevertheless, always cat project-config.jam to assert that it contains what you need it to contain.
 ```
@@ -34,7 +34,7 @@ mkdir ~/3Boost
 
 Don't shortcut paths with ~/ for home, like I've done in my notes.  In any command or config, write out the full path: /home/rl/whatever/and_more/...
 
-When you run bootstrap, it will backup but also write over any work you may have done to project-config.jam.  If you already made the changes below to project-config.jam, it will likely now be renamed project-config.jam.1.  Or some other number.  In all regards, at this point, you must make sure that the file, project-config.jam is the file with your paths and notes.  You know wnat to do....  
+When you run bootstrap, it will backup but also write over any work you may have done to project-config.jam.  If you already made the changes below to project-config.jam, it will likely now be renamed project-config.jam.1.  Or some other number.  In all regards, at this point, you must make sure that the file, project-config.jam is the file with your paths and notes.  You know what to do....  
 
 Location:  project-config.jam:  /usr/local/boost/project-config.jam
 
@@ -107,7 +107,7 @@ command:  make -f makefile_name.mak
 File Contents:
 ```
 PYTHON_VERSION = 3.11
-PYTHON_INCLUDE = /home/rl/miniconda3/envs/otcrs/include/python3.11
+PYTHON_INCLUDE = /home/rl/miniconda3/envs/xxx/include/python3.11
 
 BOOST_INC = /usr/local/boost
 BOOST_LIB = /home/rl/3Boost/stage/lib/
