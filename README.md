@@ -27,16 +27,16 @@ mkdir ~/3Boost
 ```bash
 ./bootstrap.sh --with-python=/home/rl/miniconda3/envs/xxx/bin/python3.11 --with-python-root=/home/rl/miniconda3/envs/xxx --with-python-version=3.11 --with-libraries=python --with-icu --with-icu=/home/rl/miniconda3/envs/xxx/lib --prefix=/home/rl/3Boost --exec-prefix=/home/rl/3Boost --libdir=/home/rl/3Boost/lib --includedir=/home/rl/3Boost/include
 
-// bootstrap overwrites your project-config.jam.  But a lot of the arguments I passed to bootstrap were to build the project-config.jam pile properly.  nevertheless, always cat project-config.jam to assert that it contains what you need it to contain.
+// bootstrap overwrites your project-config.jam.  But a lot of the arguments I passed to bootstrap were to build the project-config.jam file properly anyway.  Nevertheless, always cat project-config.jam to assert that it contains what you need it to contain.
 ```
 
 #### NOTE:  
 
-Don't shortcut paths with ~/ for home, like I've done in my notes.  In any command or config, write out the full path: /home/rl/whatever/and_more/...
+Don't shortcut paths with ~/ for home.  In any command or config, write out the full path: /home/rl/whatever/... instead of ~/
 
 When you run bootstrap, it will backup but also write over any work you may have done to project-config.jam.  If you already made the changes below to project-config.jam, it will likely now be renamed project-config.jam.1.  Or some other number.  In all regards, at this point, you must make sure that the file, project-config.jam is the file with your paths and notes.  You know what to do....  
 
-Location:  project-config.jam:  /usr/local/boost/project-config.jam
+File:  project-config.jam    Location: /usr/local/boost/project-config.jam
 
 #### project-config.jam file contents:
 ```bash
@@ -91,7 +91,7 @@ option.set keep-going : false ;
 ##### END of file 
 ```
 
-### Run ./b2 --help.  Then, once ready, run your own b2 with your own arguments:
+### Run ./b2 --help.  When ready, run your own b2 with your own arguments:
 ```bash
 cd /usr/local/boost
 ./b2 --with-python --prefix=/home/rl/3Boost  --stagedir=/home/rl/3Boost/stage  stage --build-type=complete  --build-dir=/home/rl/3Boost-build --layout=versioned --variant=release --link=shared threading=single,multi runtime-link=static,shared
@@ -99,7 +99,7 @@ cd /usr/local/boost
 I recommend adding this to the tail of the b2 command:  > /home/rl/3Boost/b2_output.txt
 You can read that file to look for any errors in the build.  
 
-Boost.Python .so files will now be ready for use in your c++ library build:
+Boost.Python .so files will now be ready for use in your c++ library build location you specified earlier.
 
 ###  the super-important makefile:
 command:  make -f makefile_name.mak
