@@ -2,7 +2,9 @@
 My travels with building Boost.Python
 
 
-Objective:  Build Boost.Python on Ubuntu Linux against an existing, specific conda environment that is using Python3.11.  This is in complete disregard for any default Python installation that may be on your machine, and it also does not require you to sudo apt install anything.
+Objective:  Build Boost.Python on Ubuntu Linux against an existing, specific conda environment that is using Python3.11.  I had a few system libs already installed, and as they are needed in this hocus pocus, you will need to make sure your "local" system deb install of the python version matches the conda python version.  This is due to some "dev" libraries that I'm not sure how to install into a conda env, but I know with certainty how to install into a system with deb files using apt install.  In my case, my conda version is python 3.11, and my system version is python 3.11.  On my system I had run these commands in my history, and having them installed made a difference when I tried this on a new machine:  
+`sudo apt install python3.11-dev libpython3.11-dev`  
+`sudo apt install python3.11-full`  
 
 Steps: 
 1.  Download boost.  As of this writing:  boost_1_82_0.tar.gz
@@ -70,14 +72,14 @@ if ! [ python.configured ]
     ;
 }
 
-path-constant ICU_PATH : /usr ;
+path-constant ICU_PATH : /usr ;   #not sure, but I think this is why I needed the apt install .. system files mentioned earlier.
 
 
 # List of --with-<library> and --without-<library>
 # options. If left empty, all libraries will be built.
 # Options specified on the command line completely
 # override this variable.
-libraries = python ;
+libraries = --with-python ;
 
 # These settings are equivalent to corresponding command-line
 # options.
@@ -91,7 +93,7 @@ option.set keep-going : false ;
 ##### END of file 
 ```
 
-### Run ./b2 --help.  When ready, run your own b2 with your own arguments:
+### Run ./b2 --help.  To get a feel for things.  When ready, run your own b2 with your own arguments:
 ```bash
 cd /usr/local/boost
 ./b2 --with-python --prefix=/home/rl/3Boost  --stagedir=/home/rl/3Boost/stage  stage --build-type=complete  --build-dir=/home/rl/3Boost-build --layout=versioned --variant=release --link=shared threading=single,multi runtime-link=static,shared
@@ -116,6 +118,8 @@ BOOST_LIB = /home/rl/3Boost/stage/lib/
 TARGET = calc_dist
 SOURCES = calc_dist.cpp options.cpp
 O_FILES = calc_dist.o options.o
+
+# CRITICAL:  see the -lboost_python311-gcc11-x64-1_82 below?  if you use a more recent Boost library, adjust this to the correct version for you.   
 
 # all commands on the 2nd line must be TAB-INDENTED
 $(TARGET).so: $(O_FILES)
